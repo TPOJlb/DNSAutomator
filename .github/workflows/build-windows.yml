@@ -10,25 +10,25 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install pyinstaller==6.15.0 pyarmor requests gspread oauth2client
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller==6.15.0 pyarmor requests gspread oauth2client
 
-    - name: Build EXE
-      run: |
-        pyinstaller --onefile dns_automator/app.py --name dns_automator --distpath dns_automator/dist
+      - name: Build EXE
+        run: |
+          pyinstaller --onefile --windowed app.py --name dns_automator --distpath dist
 
-    - name: Upload EXE artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: dns_automator-exe
-        path: dns_automator/dist/dns_automator.exe
+      - name: Upload EXE artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: dns_automator-exe
+          path: dist/dns_automator.exe
