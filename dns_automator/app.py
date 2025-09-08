@@ -281,103 +281,98 @@ class DNSAutomator:
         padx_val = 20
         pady_val = 5
 
-    # --- Вспомогательная функция для биндинга копирования/вставки ---
-    def bind_copy_paste(widget):
-        widget.bind('<Control-v>', lambda e: widget.event_generate('<<Paste>>'))
-        widget.bind('<Control-V>', lambda e: widget.event_generate('<<Paste>>'))
-        widget.bind('<Control-c>', lambda e: widget.event_generate('<<Copy>>'))
-        widget.bind('<Control-C>', lambda e: widget.event_generate('<<Copy>>'))
-        widget.bind('<Control-x>', lambda e: widget.event_generate('<<Cut>>'))
-        widget.bind('<Control-X>', lambda e: widget.event_generate('<<Cut>>'))
+        tk.Label(self.root, text="Google Sheet URL:").grid(row=0, column=0, sticky="e", padx=padx_val, pady=pady_val)
+        self.entry_sheet = tk.Entry(self.root, width=60)
+        self.entry_sheet.grid(row=0, column=1, padx=padx_val, pady=pady_val, sticky="ew")
+        self.entry_sheet.insert(0, self.config.get("sheet_url", ""))
 
-    # --- Поля и лэйаут ---
-    tk.Label(self.root, text="Google Sheet URL:").grid(row=0, column=0, sticky="e", padx=padx_val, pady=pady_val)
-    self.entry_sheet = tk.Entry(self.root, width=60)
-    self.entry_sheet.grid(row=0, column=1, padx=padx_val, pady=pady_val, sticky="ew")
-    self.entry_sheet.insert(0, self.config.get("sheet_url", ""))
+        tk.Label(self.root, text="Namecheap API User:").grid(row=1, column=0, sticky="e", padx=padx_val, pady=pady_val)
+        self.entry_user = tk.Entry(self.root, width=60)
+        self.entry_user.grid(row=1, column=1, padx=padx_val, pady=pady_val, sticky="ew")
+        self.entry_user.insert(0, self.config.get("api_user", ""))
 
-    tk.Label(self.root, text="Namecheap API User:").grid(row=1, column=0, sticky="e", padx=padx_val, pady=pady_val)
-    self.entry_user = tk.Entry(self.root, width=60)
-    self.entry_user.grid(row=1, column=1, padx=padx_val, pady=pady_val, sticky="ew")
-    self.entry_user.insert(0, self.config.get("api_user", ""))
+        tk.Label(self.root, text="API Key:").grid(row=2, column=0, sticky="e", padx=padx_val, pady=pady_val)
+        self.entry_key = tk.Entry(self.root, width=60, show="*")
+        self.entry_key.grid(row=2, column=1, padx=padx_val, pady=pady_val, sticky="ew")
+        self.entry_key.insert(0, self.config.get("api_key", ""))
 
-    tk.Label(self.root, text="API Key:").grid(row=2, column=0, sticky="e", padx=padx_val, pady=pady_val)
-    self.entry_key = tk.Entry(self.root, width=60, show="*")
-    self.entry_key.grid(row=2, column=1, padx=padx_val, pady=pady_val, sticky="ew")
-    self.entry_key.insert(0, self.config.get("api_key", ""))
+        tk.Label(self.root, text="Username:").grid(row=3, column=0, sticky="e", padx=padx_val, pady=pady_val)
+        self.entry_username = tk.Entry(self.root, width=60)
+        self.entry_username.grid(row=3, column=1, padx=padx_val, pady=pady_val, sticky="ew")
+        self.entry_username.insert(0, self.config.get("username", ""))
 
-    tk.Label(self.root, text="Username:").grid(row=3, column=0, sticky="e", padx=padx_val, pady=pady_val)
-    self.entry_username = tk.Entry(self.root, width=60)
-    self.entry_username.grid(row=3, column=1, padx=padx_val, pady=pady_val, sticky="ew")
-    self.entry_username.insert(0, self.config.get("username", ""))
+        tk.Label(self.root, text="Client IP:").grid(row=4, column=0, sticky="e", padx=padx_val, pady=pady_val)
+        
+        # Создаем фрейм для IP поля и кнопок
+        ip_frame = tk.Frame(self.root)
+        ip_frame.grid(row=4, column=1, padx=padx_val, pady=pady_val, sticky="ew")
 
-    tk.Label(self.root, text="Client IP:").grid(row=4, column=0, sticky="e", padx=padx_val, pady=pady_val)
-    ip_frame = tk.Frame(self.root)
-    ip_frame.grid(row=4, column=1, padx=padx_val, pady=pady_val, sticky="ew")
-    self.entry_ip = tk.Entry(ip_frame, width=50)
-    self.entry_ip.pack(side=tk.LEFT, fill=tk.X, expand=True)
-    self.entry_ip.insert(0, self.config.get("client_ip", ""))
-    ip_buttons_frame = tk.Frame(ip_frame)
-    ip_buttons_frame.pack(side=tk.RIGHT, padx=(5, 0))
-    self.btn_auto_detect = tk.Button(ip_buttons_frame, text="Auto Detect", command=self.auto_detect_ip)
-    self.btn_auto_detect.pack()
+        # Entry для IP
+        self.entry_ip = tk.Entry(ip_frame, width=50)
+        self.entry_ip.pack(side=tk.LEFT, fill=tk.X, expand=True)
+        self.entry_ip.insert(0, self.config.get("client_ip", ""))
 
-    tk.Label(self.root, text="Service Account JSON:").grid(row=5, column=0, sticky="e", padx=padx_val, pady=pady_val)
-    frame_keyfile = tk.Frame(self.root)
-    frame_keyfile.grid(row=5, column=1, padx=padx_val, pady=pady_val, sticky="ew")
-    self.entry_keyfile = tk.Entry(frame_keyfile, width=50)
-    self.entry_keyfile.pack(side=tk.LEFT, padx=(0,5), fill=tk.X, expand=True)
-    self.entry_keyfile.insert(0, self.config.get("keyfile_path", ""))
-    self.btn_browse = tk.Button(frame_keyfile, text="Browse", command=self.browse_file)
-    self.btn_browse.pack(side=tk.LEFT)
+        # Фрейм для кнопок (в стеке)
+        ip_buttons_frame = tk.Frame(ip_frame)
+        ip_buttons_frame.pack(side=tk.RIGHT, padx=(5, 0))
 
-    tk.Label(self.root, text="Customer Domain (redirect to):").grid(row=7, column=0, sticky="e", padx=padx_val, pady=pady_val)
-    self.entry_customer_domain = tk.Entry(self.root, width=60)
-    self.entry_customer_domain.grid(row=7, column=1, padx=padx_val, pady=pady_val, sticky="ew")
-    self.entry_customer_domain.insert(0, self.config.get("customer_domain", ""))
+        # Кнопка для автоматического определения IP
+        self.btn_auto_detect = tk.Button(ip_buttons_frame, text="Auto Detect", command=self.auto_detect_ip)
+        self.btn_auto_detect.pack()
 
-    tk.Label(self.root, text="Tracking Host:").grid(row=8, column=0, sticky="e", padx=padx_val, pady=pady_val)
-    self.entry_tracking_host = tk.Entry(self.root, width=60)
-    self.entry_tracking_host.grid(row=8, column=1, padx=padx_val, pady=pady_val, sticky="ew")
-    self.entry_tracking_host.insert(0, self.config.get("tracking_host", "inst"))
+        tk.Label(self.root, text="Service Account JSON:").grid(row=5, column=0, sticky="e", padx=padx_val, pady=pady_val)
+        frame_keyfile = tk.Frame(self.root)
+        frame_keyfile.grid(row=5, column=1, padx=padx_val, pady=pady_val, sticky="ew")
+        self.entry_keyfile = tk.Entry(frame_keyfile, width=50)
+        self.entry_keyfile.pack(side=tk.LEFT, padx=(0,5), fill=tk.X, expand=True)
+        self.entry_keyfile.insert(0, self.config.get("keyfile_path", ""))
+        self.btn_browse = tk.Button(frame_keyfile, text="Browse", command=self.browse_file)
+        self.btn_browse.pack(side=tk.LEFT)
 
-    tk.Label(self.root, text="Tracking Value:").grid(row=9, column=0, sticky="e", padx=padx_val, pady=pady_val)
-    self.entry_tracking_value = tk.Entry(self.root, width=60)
-    self.entry_tracking_value.grid(row=9, column=1, padx=padx_val, pady=pady_val, sticky="ew")
-    self.entry_tracking_value.insert(0, self.config.get("tracking_value", "prox.itrackly.com").rstrip('.'))
+        tk.Label(self.root, text="Customer Domain (redirect to):").grid(row=7, column=0, sticky="e", padx=padx_val, pady=pady_val)
+        self.entry_customer_domain = tk.Entry(self.root, width=60)
+        self.entry_customer_domain.grid(row=7, column=1, padx=padx_val, pady=pady_val, sticky="ew")
+        self.entry_customer_domain.insert(0, self.config.get("customer_domain", ""))
 
-    tk.Label(self.root, text="SPF Record:").grid(row=10, column=0, sticky="e", padx=padx_val, pady=pady_val)
-    self.entry_spf = tk.Entry(self.root, width=60)
-    self.entry_spf.grid(row=10, column=1, padx=padx_val, pady=pady_val, sticky="ew")
-    self.entry_spf.insert(0, self.config.get("spf", "v=spf1 include:_spf.google.com ~all"))
+        tk.Label(self.root, text="Tracking Host:").grid(row=8, column=0, sticky="e", padx=padx_val, pady=pady_val)
+        self.entry_tracking_host = tk.Entry(self.root, width=60)
+        self.entry_tracking_host.grid(row=8, column=1, padx=padx_val, pady=pady_val, sticky="ew")
+        self.entry_tracking_host.insert(0, self.config.get("tracking_host", "inst"))
 
-    self.mail_var = tk.BooleanVar()
-    self.mail_var.set(self.config.get("mail_enabled", False))
-    self.chk_mail = tk.Checkbutton(self.root, text="Enable Mail Settings", variable=self.mail_var)
-    self.chk_mail.grid(row=11, column=1, sticky="w", padx=padx_val, pady=pady_val)
+        tk.Label(self.root, text="Tracking Value:").grid(row=9, column=0, sticky="e", padx=padx_val, pady=pady_val)
+        self.entry_tracking_value = tk.Entry(self.root, width=60)
+        self.entry_tracking_value.grid(row=9, column=1, padx=padx_val, pady=pady_val, sticky="ew")
+        self.entry_tracking_value.insert(0, self.config.get("tracking_value", "prox.itrackly.com").rstrip('.'))
 
-    button_frame = tk.Frame(self.root)
-    button_frame.grid(row=12, column=1, pady=10, sticky="w")
-    self.btn_save = tk.Button(button_frame, text="Save Config", command=self.save_config)
-    self.btn_save.pack(side=tk.LEFT, padx=(0, 10))
-    self.btn_clear = tk.Button(button_frame, text="Clear Logs", command=self.clear_logs)
-    self.btn_clear.pack(side=tk.LEFT, padx=(0, 10))
-    self.btn_run = tk.Button(button_frame, text="Run DNS Setup", command=self.run_script)
-    self.btn_run.pack(side=tk.LEFT, padx=(0, 10))
-    self.btn_verify = tk.Button(button_frame, text="Verify All Domains", command=self.verify_all_domains)
-    self.btn_verify.pack(side=tk.LEFT)
+        tk.Label(self.root, text="SPF Record:").grid(row=10, column=0, sticky="e", padx=padx_val, pady=pady_val)
+        self.entry_spf = tk.Entry(self.root, width=60)
+        self.entry_spf.grid(row=10, column=1, padx=padx_val, pady=pady_val, sticky="ew")
+        self.entry_spf.insert(0, self.config.get("spf", "v=spf1 include:_spf.google.com ~all"))
 
-    self.text_output = scrolledtext.ScrolledText(self.root, width=100, height=25)
-    self.text_output.grid(row=13, column=0, columnspan=2, padx=padx_val, pady=10, sticky="nsew")
+        self.mail_var = tk.BooleanVar()
+        self.mail_var.set(self.config.get("mail_enabled", False))
+        self.chk_mail = tk.Checkbutton(self.root, text="Enable Mail Settings", variable=self.mail_var)
+        self.chk_mail.grid(row=11, column=1, sticky="w", padx=padx_val, pady=pady_val)
 
-    # --- Применяем биндинг для всех полей ---
-    for entry in [
-        self.entry_sheet, self.entry_user, self.entry_key, self.entry_username,
-        self.entry_ip, self.entry_keyfile, self.entry_customer_domain,
-        self.entry_tracking_host, self.entry_tracking_value, self.entry_spf,
-        self.text_output
-    ]:
-        bind_copy_paste(entry)
+        button_frame = tk.Frame(self.root)
+        button_frame.grid(row=12, column=1, pady=10, sticky="w")
+        self.btn_save = tk.Button(button_frame, text="Save Config", command=self.save_config)
+        self.btn_save.pack(side=tk.LEFT, padx=(0, 10))
+        self.btn_clear = tk.Button(button_frame, text="Clear Logs", command=self.clear_logs)
+        self.btn_clear.pack(side=tk.LEFT, padx=(0, 10))
+        self.btn_run = tk.Button(button_frame, text="Run DNS Setup", command=self.run_script)
+        self.btn_run.pack(side=tk.LEFT, padx=(0, 10))
+        self.btn_verify = tk.Button(button_frame, text="Verify All Domains", command=self.verify_all_domains)
+        self.btn_verify.pack(side=tk.LEFT)
+
+        self.text_output = scrolledtext.ScrolledText(self.root, width=100, height=25)
+        self.text_output.grid(row=13, column=0, columnspan=2, padx=padx_val, pady=10, sticky="nsew")
+        
+        # Горячие клавиши для копирования/вставки/вырезания/выделения всего
+        self.text_output.bind("<Control-c>", lambda e: self.text_output.event_generate("<<Copy>>"))
+        self.text_output.bind("<Control-x>", lambda e: self.text_output.event_generate("<<Cut>>"))
+        self.text_output.bind("<Control-v>", lambda e: self.text_output.event_generate("<<Paste>>"))
+        self.text_output.bind("<Control-a>", lambda e: (self.text_output.tag_add("sel", "1.0", "end"), "break"))
 
     def auto_detect_ip(self):
         """Автоматически определяет и устанавливает текущий IP адрес"""
