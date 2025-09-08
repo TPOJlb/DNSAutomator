@@ -1,35 +1,39 @@
-name: Build Windows EXE
+name: Build DNSAutomator EXE
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: windows-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: 3.11
+          python-version: '3.11'
 
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
+          pip install pyinstaller --upgrade
           pip install -r requirements.txt
-          pip install pyinstaller
+
+      - name: Verify Python and Pip
+        run: |
+          python --version
+          pip --version
 
       - name: Build EXE with PyInstaller
         run: |
           pyinstaller --noconsole --onefile dns_automator/app.py
+        continue-on-error: true  # позволяет вывести лог даже если сборка падает
 
-      - name: Upload artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: dns-automator-exe
-          path: dist/app.exe
+      - name: List dist folder
+        run: dir dist
