@@ -2,8 +2,9 @@ name: Build Windows EXE
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build-windows:
@@ -18,18 +19,20 @@ jobs:
       with:
         python-version: '3.11'
 
+    - name: Upgrade pip
+      run: python -m pip install --upgrade pip
+
     - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
-        pip install pyinstaller
+      run: pip install -r requirements.txt
+
+    - name: Install PyInstaller
+      run: pip install pyinstaller>=5.13.0
 
     - name: Build EXE with PyInstaller
-      run: |
-        pyinstaller --noconsole --onefile dns_automator/app.py --name DNSAutomator
+      run: pyinstaller --noconsole --onefile dns_automator/app.py --name DNSAutomator
 
     - name: Upload EXE artifact
       uses: actions/upload-artifact@v4
       with:
-        name: DNSAutomator-Windows-EXE
+        name: DNSAutomator-windows
         path: dist/DNSAutomator.exe
