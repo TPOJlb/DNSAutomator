@@ -29,7 +29,7 @@ jobs:
         pyinstaller --noconsole --onefile dns_automator/app.py --name DNSAutomator
 
     - name: Upload EXE artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: DNSAutomator-Windows-EXE
         path: dist/DNSAutomator.exe
