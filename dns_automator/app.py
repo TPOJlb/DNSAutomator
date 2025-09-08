@@ -368,6 +368,19 @@ class DNSAutomator:
         self.text_output = scrolledtext.ScrolledText(self.root, width=100, height=25)
         self.text_output.grid(row=13, column=0, columnspan=2, padx=padx_val, pady=10, sticky="nsew")
 
+        def bind_copy_paste(widget):
+        widget.bind('<Control-v>', lambda e: widget.event_generate('<<Paste>>'))
+        widget.bind('<Control-c>', lambda e: widget.event_generate('<<Copy>>'))
+        widget.bind('<Control-x>', lambda e: widget.event_generate('<<Cut>>'))
+
+    for entry in [
+        self.entry_sheet, self.entry_user, self.entry_key,
+        self.entry_username, self.entry_ip, self.entry_keyfile,
+        self.entry_customer_domain, self.entry_tracking_host,
+        self.entry_tracking_value, self.entry_spf, self.text_output
+    ]:
+        bind_copy_paste(entry)
+
     def auto_detect_ip(self):
         """Автоматически определяет и устанавливает текущий IP адрес"""
         self.log_message("\n[INFO] Detecting current IP address...")
