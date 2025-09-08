@@ -25,10 +25,10 @@ jobs:
 
     - name: Build EXE
       run: |
-        pyinstaller --onefile app.py --name dns_automator --distpath dist
+        pyinstaller --onefile dns_automator/app.py --name dns_automator --distpath dns_automator/dist
 
     - name: Upload EXE artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: dns_automator-exe
-        path: dist/dns_automator.exe
+        path: dns_automator/dist/dns_automator.exe
