@@ -1,5 +1,5 @@
 {
-  "sheet_url": "https://docs.google.com/spreadsheets/d/1V1PlL04Fa0XUIRhcarc632s7DP_Y5nGM7GmKg5SNkNQ/edit?gid=0#gid=0&range=A2",
+  "sheet_url": "https://docs.google.com/spreadsheets/d/1V1PlL04Fa0XUIRhcarc632s7DP_Y5nGM7GmKg5SNkNQ/edit?gid=0#gid=0",
   "api_user": "senseicapital",
   "api_key": "16dc0ad1f1684f9788d9786de128168c",
   "username": "senseicapital",
@@ -9,5 +9,5 @@
   "tracking_value": "prox.itrackly.com",
   "spf": "v=spf1 include:_spf.google.com ~all",
   "mail_enabled": true,
-  "keyfile_path": "/Users/a449/Downloads/dnsautomator-dc85182ee255.json"
+  "keyfile_path": "/Users/a449/Downloads/dnsautomator-635727127982.json"
 }
