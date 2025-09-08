@@ -10,7 +10,8 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout code
+      uses: actions/checkout@v3
 
     - name: Setup Python
       uses: actions/setup-python@v4
@@ -22,10 +23,6 @@ jobs:
         python -m pip install --upgrade pip
         pip install pyinstaller==6.15.0 pyarmor requests gspread oauth2client
 
-    - name: Inject GCP credentials
-      run: |
-        echo "${{ secrets.GCP_CREDENTIALS_JSON }}" > dns_automator/dnsautomator-dceaa2535aec.json
-
     - name: Build EXE
       run: |
         pyinstaller --onefile app.py --name dns_automator --distpath dist
@@ -35,4 +32,3 @@ jobs:
       with:
         name: dns_automator-exe
         path: dist/dns_automator.exe
-
